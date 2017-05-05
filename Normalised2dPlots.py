@@ -4,8 +4,8 @@ import glob
 
 gStyle.SetOptStat(0); 
 #myfile = TFile("/eos/atlas/user/j/jwsmith/reprocessedNtuples/merged_from_julien/v007/ttbar.root","read")
-#myfile = TFile("/eos/atlas/user/j/jwsmith/reprocessedNtuples/merged_from_julien/v007/ttbar.root","read")
-#myttree = myfile.Get("nominal")
+# myfile = TFile("/eos/atlas/user/j/jwsmith/reprocessedNtuples/v0061/SR1/ejets/410082.ttgamma_noallhad.p2952.v061.001.root","read")
+# myttree = myfile.Get("nominal")
 
 path = "/eos/atlas/user/c/caudron/TtGamma_ntuples/v007/SR1/*/"
 myttree = TChain("nominal")
@@ -39,13 +39,14 @@ y1 = h_sum.GetYaxis()
 y1.SetTitle("Photon parent")
 x1 = h_sum.GetXaxis()
 x1.SetTitle("ph_HFT_MVA")
-# from matplotlib import rcParams
-# rcParams['text.usetex'] = True
-# plt.rc('font', family='sans-serif')
-# plt.rc('font', serif='Helvetica')
-# ax = plt.axes()
-# ax.text(1.5, 16, r'{{\it \textbf {\Huge ATLAS}}}')
-# ax.text(0.47, 16, r'{\huge Internal}')
+lumi = TLatex();
+lumi.SetNDC();
+lumi.SetTextAlign(12);
+lumi.SetTextFont(63);
+lumi.SetTextSizePixels(15);
+lumifb = 3.2
+lumi.DrawLatex(0.35,0.65, "#it{#scale[1.2]{ATLAS}} #bf{Internal}");
+lumi.DrawLatex(0.35,0.6,"#sqrt{s}=13 TeV, " + str(lumifb) +" fb^{-1}");
 
 c.SaveAs("photonorigin_HFT_MVA.png")
 
