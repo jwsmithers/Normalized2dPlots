@@ -62,27 +62,27 @@ def btagVsELD(typeOfevent,channel):
 
   c = TCanvas("c")
 
-  cutstring=""
+  cutstring=" event_ngoodphotons == 1 && "
   # eventweight=""
   typeOfPlot="COLZ norm"
-  eventweight="(weight_mc*weight_pileup*ph_SF_eff[selph_index1]*ph_SF_iso[selph_index1]*weight_leptonSF*weight_jvt*weight_bTagSF_Continuous*event_norm * event_lumi) && "
+  eventweight="weight_mc*weight_pileup*ph_SF_eff[selph_index1]*ph_SF_iso[selph_index1]*weight_leptonSF*weight_jvt*weight_bTagSF_Continuous*event_norm * event_lumi *  "
 
+  # myttree.Draw("event_nbjets77:event_ELD_MVA>> histogram(20,0,1,6,1,5)",  eventweight + cutstring + " event_nbjets77 == 0 " , typeOfPlot)
+  myttree.Draw("event_nbjets77:event_ELD_MVA>> histogram1(20,0,1,4,1,5)", eventweight + " (" + cutstring + "  event_nbjets77 == 1) " , typeOfPlot)
+  myttree.Draw("event_nbjets77:event_ELD_MVA>> histogram2(20,0,1,4,1,5)", eventweight + " ("  + cutstring + " event_nbjets77 == 2) " , typeOfPlot)
+  myttree.Draw("event_nbjets77:event_ELD_MVA>> histogram3(20,0,1,4,1,5)", eventweight + " ("  + cutstring + " event_nbjets77 == 3) " , typeOfPlot)
+  myttree.Draw("event_nbjets77:event_ELD_MVA>> histogram4(20,0,1,4,1,5)", eventweight + " ("  + cutstring + " event_nbjets77 >= 4) ",  typeOfPlot)
+  #myttree.Draw("event_nbjets77:event_ELD_MVA>> histogram5(20,0,1,5,0.5,5.5)", eventweight + " ("  + cutstring + " event_nbjets77 == 5) ",  typeOfPlot)
 
-  # myttree.Draw("event_nbjets77:event_ELD_MVA>> histogram(20,0,1,6,-0.5,5.5)",  eventweight + cutstring + " event_nbjets77 == 0 " , typeOfPlot)
-  myttree.Draw("event_nbjets77:event_ELD_MVA>> histogram1(20,0,1,5,0.5,5.5)", eventweight + cutstring + " event_nbjets77 == 1 " , typeOfPlot)
-  myttree.Draw("event_nbjets77:event_ELD_MVA>> histogram2(20,0,1,5,0.5,5.5)", eventweight + cutstring + " event_nbjets77 == 2 " , typeOfPlot)
-  myttree.Draw("event_nbjets77:event_ELD_MVA>> histogram3(20,0,1,5,0.5,5.5)", eventweight + cutstring + " event_nbjets77 == 3 " , typeOfPlot)
-  myttree.Draw("event_nbjets77:event_ELD_MVA>> histogram4(20,0,1,5,0.5,5.5)", eventweight + cutstring + " event_nbjets77 == 4 ",  typeOfPlot)
-  myttree.Draw("event_nbjets77:event_ELD_MVA>> histogram5(20,0,1,5,0.5,5.5)", eventweight + cutstring + " event_nbjets77 == 5 ",  typeOfPlot)
+  ylabels = ["1","2","3","#ge4"]
 
-
-  h_sum = TH2D("test","test",20,0,1,5,0.5,5.5)
+  h_sum = TH2D("test","test",20,0,1,4,1,5)
   # h_sum.Add(histogram);
   h_sum.Add(histogram1);
   h_sum.Add(histogram2);
   h_sum.Add(histogram3);
   h_sum.Add(histogram4);
-  h_sum.Add(histogram5);
+ # h_sum.Add(histogram5);
 
   h_sum.Draw("COLZ ")
   h_sum.SetTitle("")
@@ -90,26 +90,31 @@ def btagVsELD(typeOfevent,channel):
   y1.SetTitle("# of b-tagged jets")
   x1 = h_sum.GetXaxis()
   x1.SetTitle("event level discriminator")
+
+  y1.SetNdivisions(-004)  
+  y1.ChangeLabel(-1,-1,-1,-1,-1,-1,"#geq4")
+  y1.CenterLabels(True)
+
   lumi = TLatex();
   lumi.SetNDC();
   lumi.SetTextAlign(12);
   lumi.SetTextFont(63);
   lumi.SetTextSizePixels(15);
   lumifb = 36.1
-  lumi.DrawLatex(0.15,0.85, "#it{#scale[1.2]{ATLAS}} #bf{Internal}");
-  lumi.DrawLatex(0.15,0.8,"#sqrt{s}=13 TeV, " + str(lumifb) +" fb^{-1}");
-  lumi.DrawLatex(0.15,0.75, " #bf{"+typeOfevent_label+"}");
-  lumi.DrawLatex(0.15,0.70, " #bf{"+channelLabel+"}");
+  lumi.DrawLatex(0.15,0.87, "#it{#scale[1.2]{ATLAS}} #bf{Internal}");
+  lumi.DrawLatex(0.15,0.82,"#sqrt{s}=13 TeV, " + str(lumifb) +" fb^{-1}");
+  lumi.DrawLatex(0.15,0.77, " #bf{"+typeOfevent_label+"}");
+  lumi.DrawLatex(0.15,0.72, " #bf{"+channelLabel+"}");
 
   c.SaveAs("btagVSEld_"+typeOfevent+"_"+channel+".eps")
 
 # Weird memory leak? I have to do these one at a time...
-# btagVsELD("all", "SL")
-# btagVsELD("background","SL")
-# btagVsELD("signal","SL")
-
-# btagVsELD("all", "DL")
-# btagVsELD("background","DL")
+#btagVsELD("all", "SL")
+#btagVsELD("background","SL")
+#btagVsELD("signal","SL")
+#
+#btagVsELD("all", "DL")
+#btagVsELD("background","DL")
 btagVsELD("signal","DL")
 
 def photonOriginVsPPT():
