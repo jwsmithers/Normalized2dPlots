@@ -86,6 +86,7 @@ def btagVsELD(typeOfevent,channel):
 
   h_sum.Draw("COLZ ")
   h_sum.SetTitle("")
+  h_sum.SetMinimum(0)
   y1 = h_sum.GetYaxis()
   y1.SetTitle("# of b-tagged jets")
   x1 = h_sum.GetXaxis()
